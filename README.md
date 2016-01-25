@@ -8,3 +8,8 @@ Computes the effective distance between nodes in a weighted directed graph as de
 
     $ sudo python setup.py install
 
+## Usage
+
+```python
+>>> import effdist
+```
