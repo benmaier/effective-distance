@@ -10,15 +10,15 @@ def get_effdist_tree(G,source,cutoff=None,create_using=nx.DiGraph,weight='weight
     
     length,path = nx.single_source_dijkstra(G,source,cutoff=cutoff,weight=weight)
 
-    for n in path.keys():
+    for n in list(path.keys()):
         T.add_path(path[n])
         T.node[n][effdist_key] = length[n]
 
     return T
 
 def get_mean_effdist(G,with_error=False,weight='weight',get_all=False):
-    length = nx.all_pairs_dijkstra_path_length(G)
-    res = [ length[n][n2] for n in length.keys() for n2 in length[n].keys() ]
+    length = dict(nx.all_pairs_dijkstra_path_length(G))
+    res = [ length[n][n2] for n in list(length.keys()) for n2 in list(length[n].keys()) ]
 
     if get_all:
         return array(res)
@@ -55,7 +55,7 @@ def modify_to_effdist_graph(probability_graph,weight='weight'):
         if weight in e[2]:
             dat = float(e[2][weight])
         else:
-            print "modify_to_effdist_graph: wrong key (", weight,")"
+            print("modify_to_effdist_graph: wrong key (", weight,")")
             sys.exit(1)
 
         probability_graph[e[0]][e[1]][weight] = 1. - log(dat)
@@ -77,7 +77,7 @@ if __name__=="__main__":
     T = get_effdist_tree(G,0)
 
 
-    pos = nx.graphviz_layout(G,prog='neato')
+    pos = nx.drawing.nx_pydot.graphviz_layout(G,prog='neato')
     nx.draw_networkx(G,pos,ax=ax1)
     nx.draw_networkx_edge_labels(G,pos,ax=ax1)
 
@@ -88,7 +88,7 @@ if __name__=="__main__":
     #nx.draw_networkx_edge_labels(G,pos)
 
     e = G.edges(data=True)[0]
-    print get_mean_effdist(G)
+    print(get_mean_effdist(G))
 
 
     pl.show()
