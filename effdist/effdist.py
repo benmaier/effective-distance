@@ -28,8 +28,9 @@ def get_mean_effdist(G,with_error=False,weight='weight',get_all=False):
         return mean(res)
 
 def get_probability_graph(G_,weight=None,for_effdist=False):
+
     G = nx.DiGraph(G_)
-    k_out = G.out_degree(weight=weight)
+    k_out = dict(G.out_degree(weight=weight))
 
     if weight is None:
         key = 'weight'
@@ -37,6 +38,7 @@ def get_probability_graph(G_,weight=None,for_effdist=False):
         key = weight
 
     for e in G.edges(data=True):
+
         if weight in e[2]:
             dat = float(e[2][weight])
         else:
@@ -46,6 +48,7 @@ def get_probability_graph(G_,weight=None,for_effdist=False):
             G[e[0]][e[1]][key] = 1. - log(dat/k_out[e[0]])
         else:
             G[e[0]][e[1]][key] = dat/k_out[e[0]]
+
 
     return G
 
